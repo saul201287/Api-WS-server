@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
 
   socket.on("message", (message) => {
     console.log("Mensaje recibido del cliente: %s", message);
-    socket.broadcast().emit("mensajeServidor", message); 
+    socket.emit("mensajeServidor", message); 
   });
 
  
