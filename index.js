@@ -1,26 +1,32 @@
-import express from "express";
-import { Server } from "socket.io";
+const express = require("express");
+const { Server } = require("socket.io");
+const cors = require("cors");
 
 const app = express();
+
 const port = 3005;
 
 app.use(express.json());
 
+app.use(cors());
+
 const server = app.listen(port, () => {
-  console.log(`api corriendo en el purto ${port}`);
+  console.log(`API corriendo en el puerto ${port}`);
 });
 
-const ServerWS = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
-ServerWS.on("connection", (ws) => {
+io.on("connection", (socket) => {
   console.log("Cliente conectado");
 
-  ws.on("message", (message) => {
+  socket.on("message", (message) => {
     console.log("Mensaje recibido del cliente: %s", message);
-    ws.emit("Mensaje recibido por el servidor: " + message);
+    socket.broadcast().emit("mensajeServidor", message); 
   });
 
-  ws.on("close", () => {
-    console.log("Cliente desconectado");
-  });
+ 
 });
