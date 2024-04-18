@@ -9,7 +9,7 @@ const app = express();
 const port = 3005;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 const server = app.listen(port, () => {
   console.log(`API corriendo en el puerto ${port}`);
@@ -26,7 +26,7 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("Nuevo usuario conectado:", socket.id);
   const userChannel = `usuario${socket.decoded}`;
-  socket.join("user 1");
+  socket.join("user");
   //console.log(userChannel);
   socket.on("temperatura", (data) => {
     console.log(data);
