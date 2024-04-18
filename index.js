@@ -30,31 +30,34 @@ io.on("connection", (socket) => {
   //console.log(userChannel);
   socket.on("temperatura", (data) => {
     console.log(data);
-    const { recipient, message } = data;
+    const { recipient, message, codigo } = data;
     const recipientChannel = `user_${recipient}`;
 
     io.emit("temperatura", {
       message: message,
+      codigo:codigo
     });
     
   });
   socket.on("notification-alert", (data) => {
     console.log(data);
-    const { recipient, message } = data;
+    const { recipient, message, codigo } = data;
     const recipientChannel = `user_${recipient}`;
 
     io.emit("notification-alert", {
       message: message,
+      codigo:codigo
     });
     
   });
   socket.on("notification-desbloque", (data) => {
     console.log(data);
-    const { recipient, message } = data;
+    const { recipient, message, codigo} = data;
     const recipientChannel = `user_${recipient}`;
 
     io.emit("notification-desbloquea", {
       message: message,
+      codigo:codigo
     });
     
   });
