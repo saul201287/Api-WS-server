@@ -20,24 +20,42 @@ const io = new Server(server, {
     origin: "*",
   },
 });
-io.use((socket, next) => {
-  verifyToken(socket, next);
-});
+//io.use((socket, next) => {
+// verifyToken(socket, next);
+//});
 io.on("connection", (socket) => {
   console.log("Nuevo usuario conectado:", socket.decoded);
   const userChannel = `usuario${socket.decoded}`;
-  socket.join(userChannel);
-  console.log(userChannel);
-  socket.on("message", (data) => {
+  //socket.join(userChannel);
+  //console.log(userChannel);
+  socket.on("temperatura", (data) => {
+    console.log(data);
     const { recipient, message } = data;
     const recipientChannel = `user_${recipient}`;
-    if (io.sockets.adapter.rooms.has(recipientChannel)) {
-      io.to(recipientChannel).emit("message", {
-        from: socket.decoded.username,
-        message: message,
-      });
-    } else {
-      console.log(`El usuario ${recipient} no está conectado actualmente.`);
-    }
+
+    io.emit("temperatura", {
+      message: message,
+    });
+    
+  });
+  socket.on("notification-alert", (data) => {
+    console.log(data);
+    const { recipient, message } = data;
+    const recipientChannel = `user_${recipient}`;
+
+    io.emit("notification-alert", {
+      message: message,
+    });
+    
+  });
+  socket.on("notification-desbloque", (data) => {
+    console.log(data);
+    const { recipient, message } = data;
+    const recipientChannel = `user_${recipient}`;
+
+    io.emit("notification-desbloquea", {
+      message: message,
+    });
+    
   });
 });
