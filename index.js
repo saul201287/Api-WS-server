@@ -24,9 +24,9 @@ const io = new Server(server, {
 // verifyToken(socket, next);
 //});
 io.on("connection", (socket) => {
-  console.log("Nuevo usuario conectado:", socket.decoded);
+  console.log("Nuevo usuario conectado:", socket.id);
   const userChannel = `usuario${socket.decoded}`;
-  //socket.join(userChannel);
+  socket.join("user 1");
   //console.log(userChannel);
   socket.on("temperatura", (data) => {
     console.log(data);
