@@ -20,45 +20,41 @@ const io = new Server(server, {
     origin: "*",
   },
 });
-//io.use((socket, next) => {
-// verifyToken(socket, next);
-//});
+
+io.use((socket, next) => {
+  verifyToken(socket, next);
+});
+
 io.on("connection", (socket) => {
-  console.log("Nuevo usuario conectado:", socket.id);
-  const userChannel = `usuario${socket.decoded}`;
-  socket.join("user");
-  //console.log(userChannel);
+  console.log("Nuevo usuario conectado:", socket.decoded);
+
   socket.on("temperatura", (data) => {
     console.log(data);
     const { recipient, message, codigo } = data;
-    const recipientChannel = `user_${recipient}`;
 
-    io.emit("temperatura", {
+    io.to(socket.decoded).emit("temperatura", {
       message: message,
-      codigo:codigo
+      codigo: codigo,
     });
-    
   });
+
   socket.on("notification-alert", (data) => {
     console.log(data);
     const { recipient, message, codigo } = data;
-    const recipientChannel = `user_${recipient}`;
 
-    io.emit("notification-alert", {
+    io.to(socket.decoded).emit("notification-alert", {
       message: message,
-      codigo:codigo
+      codigo: codigo,
     });
-    
   });
-  socket.on("notification-desbloque", (data) => {
-    console.log(data);
-    const { recipient, message, codigo} = data;
-    const recipientChannel = `user_${recipient}`;
 
-    io.emit("notification-desbloquea", {
+  socket.on("notification-desbloqueo", (data) => {
+    console.log(data);
+    const { recipient, message, codigo } = data;
+
+    io.to(socket.decoded).emit("notification-desbloqueo", {
       message: message,
-      codigo:codigo
+      codigo: codigo,
     });
-    
   });
 });
